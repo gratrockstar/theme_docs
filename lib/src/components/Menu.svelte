@@ -1,9 +1,12 @@
 <script>
   export let files;
+  export let activeLink = '';
   export let loadNewFile;
 
+  console.log(files);
+  console.log(activeLink);
+
   function toggle(e) {
-    e.preventDefault();
     e.target.nextElementSibling.classList.toggle('open');
   }
 
@@ -25,19 +28,26 @@
       fill: currentColor;
     }
   }
-  h2 {
-    font-size: 1rem;
-    margin: 0;
-    font-weight: normal;
-    &:hover {
-      cursor: pointer;
-    }
-  }
   a {
     text-decoration: none;
     color: #000;
     &:hover {
-      text-decoration: underline;
+      //text-decoration: underline;
+      opacity: .6;
+    }
+    &:focus {
+      box-shadow: none;
+      outline: none;
+    }
+    &:focus-visible {
+      box-shadow: 0 0 0 1px #4f94d4, 0 0 2px 1px rgba(79,148,212,.8);
+      outline: 1px solid transparent;
+    }
+    &.active {
+      font-weight: 500;
+      &:hover {
+        opacity: 1;
+      }
     }
   }
   ul {
@@ -60,6 +70,7 @@
 			<a 
         href={file.filepath} 
         on:click|preventDefault={loadNewFile(file.filepath)}
+        class:active={ file.filepath === activeLink }
       >
         <i>
           <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 24 24">
@@ -71,7 +82,7 @@
 		</li>
 		{:else}
     <li>
-      <a href="#" on:click={toggle} on:keypress={toggle} class="folder">
+      <a href="#file" on:click|preventDefault={toggle} class="folder">
         <i>
           <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 24 24">
             <path d="M 4 4 C 2.9057453 4 2 4.9057453 2 6 L 2 18 C 2 19.094255 2.9057453 20 4 20 L 20 20 C 21.094255 20 22 19.094255 22 18 L 22 8 C 22 6.9057453 21.094255 6 20 6 L 12 6 L 10 4 L 4 4 z M 4 6 L 9.171875 6 L 11.171875 8 L 20 8 L 20 18 L 4 18 L 4 6 z"></path>
@@ -79,7 +90,7 @@
         </i>
         {i}
       </a>
-      <svelte:self files={JSON.parse(file)} {loadNewFile} />
+      <svelte:self files={JSON.parse(file)} {activeLink} {loadNewFile} />
     </li>
 		{/if}
 	{/each}

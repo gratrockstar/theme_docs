@@ -5,7 +5,10 @@
 
 	let source = `Click an item in the menu to load documentation.`;
 
+	let activeLink = '';
+
 	function loadNewFile(url) {
+		activeLink = url;
 		const promise = fetch(url)
 		.then(response => response.text())
 		.then((results) => {
@@ -50,7 +53,7 @@
 
 <div class="theme-docs-container">
 	<aside class="theme-docs-menu">
-		<Menu {files} {loadNewFile} />
+		<Menu {files} {activeLink} {loadNewFile} />
 	</aside>
 	<div class="theme-docs-content">
 		<SvelteMarkdown {source} />
