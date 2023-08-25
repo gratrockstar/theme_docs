@@ -4,7 +4,7 @@ Adds a top level menu item in the admin for Theme Documentation.
 
 ![Screenshot](screenshot.png)
 
-The plugin scans a folder contained in the theme called /documentation for .md files and builds a menu tree that loads the .md file when clicked.
+The plugin scans a folder contained in the theme called /documentation, plus subfolders, for .md files and builds a menu tree that loads the .md file when clicked.
 
 Note: Any images contained in the .md files should use either an absolute URL or the relative path from the site's root.  
 
