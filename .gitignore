@@ -1,0 +1,3 @@
+/vendor/
+/lib/node_modules/
+composer.lock
