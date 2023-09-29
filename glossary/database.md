@@ -1,4 +1,5 @@
 # Database
+
 >Structured storage for content and settings in a WordPress website.
 
 ## Definition

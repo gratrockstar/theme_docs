@@ -1,4 +1,5 @@
 # Bug Tracking
+
 >Process of identifying and reporting issues on a WordPress site for resolution.
 
 ## Definition

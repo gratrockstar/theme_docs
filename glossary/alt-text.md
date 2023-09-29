@@ -1,4 +1,5 @@
 # Alt Text
+
 >Descriptive text for images to enhance accessibility.
 
 ## Definition

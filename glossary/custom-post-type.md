@@ -1,4 +1,5 @@
 # Custom Post Type
+
 >Admin-defined content type for organizing and displaying specialized content on a WordPress site.
 
 ## Definition

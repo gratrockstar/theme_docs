@@ -1,4 +1,5 @@
 # Color Palette
+
 >Cohesive set of colors for design harmony and identity.
 
 ## Definition

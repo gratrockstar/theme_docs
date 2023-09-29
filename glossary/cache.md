@@ -1,4 +1,5 @@
 # Cache
+
 >Speed-boosting data storage.
 
 ## Definition

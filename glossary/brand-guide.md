@@ -1,4 +1,5 @@
 # Brand Guide (Style Guide)
+
 >Document defining visual and design elements for a consistent WordPress website appearance.
 
 ## Definition

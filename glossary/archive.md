@@ -1,4 +1,5 @@
 # Archive
+
 >Organized collection of posts grouped by date or taxonomy in WordPress.
 
 ## Definition
