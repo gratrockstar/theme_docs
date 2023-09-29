@@ -259,7 +259,14 @@ td.files = <?php echo wp_kses_post( $this->get_documentation_files( $this->path_
 			}
 
 			// sort files.
-			asort( $files );
+			// glossary needs this for case insensitive alpha sort.
+			if ( $type === 'glossary' ) {
+				$key_values = array_column($files, 'name'); 
+				array_multisort($key_values, SORT_ASC, SORT_NATURAL|SORT_FLAG_CASE,  $files);
+			}	else {
+				// docs is set up a bit different, to push folders to the bottom.
+				asort( $files );
+			}
 
 			// return json.
 			return wp_json_encode( $files );
