@@ -21,9 +21,14 @@
 <style lang="scss">
 	.theme-docs-container {
 		display: flex;
+		background-color: #fff;
+		width: 95%;
+		padding: 2%;
 	}
 	.theme-docs-menu {
 		min-width: 300px;
+		max-height: 50rem;
+    	overflow: scroll;
 	}
 	.theme-docs-content {
 		width: 100%;
