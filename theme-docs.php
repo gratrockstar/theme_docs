@@ -60,6 +60,20 @@ if ( ! class_exists( 'ThemeDocs' ) ) {
 		public $uri_to_docs;
 
 		/**
+		 * Path to glossary.
+		 *
+		 * @var string
+		 */
+		public $path_to_glossary;
+
+		/**
+		 * URI to glossary.
+		 *
+		 * @var string
+		 */
+		public $uri_to_glossary;
+
+		/**
 		 * Get Instance.
 		 *
 		 * @return $instance
@@ -90,6 +104,9 @@ if ( ! class_exists( 'ThemeDocs' ) ) {
 			$this->path_to_docs = apply_filters( 'theme_docs_path_to_docs', get_stylesheet_directory() . '/documentation' );
 			$this->uri_to_docs  = apply_filters( 'theme_docs_uri_to_docs', get_stylesheet_directory_uri() . '/documentation' );
 
+			$this->path_to_glossary = apply_filters( 'theme_docs_path_to_glossary', plugin_dir_path( __FILE__ ) . 'glossary' );
+			$this->uri_to_glossary  = apply_filters( 'theme_docs_uri_to_glossary', plugin_dir_url( __FILE__ ) . 'glossary' );
+
 		}
 
 		/**
@@ -116,8 +133,8 @@ if ( ! class_exists( 'ThemeDocs' ) ) {
 		public function admin_menu() {
 
 			$theme_docs_page = \add_menu_page(
-				'Theme Docs',
-				'Theme Docs',
+				__( 'Theme Docs', 'td' ),
+				__( 'Theme Docs', 'td' ),
 				'edit_posts',
 				'theme-documentation',
 				[ $this, 'theme_documentation_page' ],
@@ -125,8 +142,18 @@ if ( ! class_exists( 'ThemeDocs' ) ) {
 				61
 			);
 
+			$theme_glossary_page = \add_submenu_page(
+				'theme-documentation',
+				__( 'Glossary', 'td' ),
+				__( 'Glossary', 'td' ),
+				'edit_posts',
+				'theme-glossary',
+				[ $this, 'theme_glossary_page' ],
+			);
+
 			// Load the JS conditionally.
 			add_action( 'load-' . $theme_docs_page, [ $this, 'load_admin_js' ] );
+			add_action( 'load-' . $theme_glossary_page, [ $this, 'load_admin_js' ] );
 
 		}
 
@@ -143,7 +170,7 @@ if ( ! class_exists( 'ThemeDocs' ) ) {
 		}
 
 		/**
-		 * Adds the admin menu page markup.
+		 * Adds the docs admin menu page markup.
 		 *
 		 * @return void
 		 * @author Garrett Baldwin <garrett.baldwin@webdevstudios.com>
@@ -153,8 +180,11 @@ if ( ! class_exists( 'ThemeDocs' ) ) {
 
 			$directory_exists = file_exists( $this->path_to_docs );
 			?>
-		<h1>Theme Documentation</h1>
+		<h1><?php esc_html_e( 'Theme Documentation', 'td' ); ?></h1>
 			<?php if ( ! $directory_exists ) : ?>
+			<script>
+				const td = false;
+			</script>
 		<p><?php esc_html_e( 'No documentation exists.  To add it, add a /documentation folder to your theme, and add markdown files there.', 'td' ); ?></p>
 		<?php else : ?>
 <script>
@@ -167,14 +197,44 @@ td.files = <?php echo wp_kses_post( $this->get_documentation_files( $this->path_
 		}
 
 		/**
+		 * Adds the glossary admin menu page markup.
+		 *
+		 * @return void
+		 * @author Garrett Baldwin <garrett.baldwin@webdevstudios.com>
+		 * @since  2023-09-29
+		 */
+		public function theme_glossary_page() {
+			$directory_exists = file_exists( $this->path_to_glossary );
+			?>
+		<h1><?php esc_html_e( 'Glossary', 'td' ); ?></h1>
+			<?php if ( ! $directory_exists ) : ?>
+			<script>
+				const td = false;
+			</script>
+		<p><?php esc_html_e( 'No glossary exists.', 'td' ); ?></p>
+		<?php else : ?>
+<script>
+const td = {};
+td.files = <?php echo wp_kses_post( $this->get_documentation_files( $this->path_to_glossary, 'glossary' ) ); ?>
+</script>
+		<div id="theme-docs" class="documentation-container"></div>
+		<?php endif; ?>
+			<?php
+		}
+
+		/**
 		 * Get documentation files and sort into array.
 		 *
 		 * @param string $dir Directory path.
+		 * @param string $type Type of path.
 		 * @return string JSON encoded files array.
 		 * @author Garrett Baldwin <garrett.baldwin@webdevstudios.com>
 		 * @since  2023-07-28
 		 */
-		public function get_documentation_files( $dir ) {
+		public function get_documentation_files( $dir, $type = 'docs' ) {
+
+			$path = 'path_to_' . $type;
+			$uri  = 'uri_to_' . $type;
 
 			// get files without .. or .
 			$scanned_dir = array_diff( scandir( $dir ), [ '..', '.' ] );
@@ -183,7 +243,7 @@ td.files = <?php echo wp_kses_post( $this->get_documentation_files( $this->path_
 			// loop through files and add to array.
 			foreach ( $scanned_dir as $key => $value ) {
 
-				$current_filepath = str_replace( $this->path_to_docs, $this->uri_to_docs, $dir . DIRECTORY_SEPARATOR . $value );
+				$current_filepath = str_replace( $this->$path, $this->$uri, $dir . DIRECTORY_SEPARATOR . $value );
 
 				if ( is_dir( $dir . DIRECTORY_SEPARATOR . $value ) ) {
 					$files[ $value ] = $this->get_documentation_files( $dir . DIRECTORY_SEPARATOR . $value );

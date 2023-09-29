@@ -3,9 +3,6 @@
   export let activeLink = '';
   export let loadNewFile;
 
-  console.log(files);
-  console.log(activeLink);
-
   function toggle(e) {
     e.target.nextElementSibling.classList.toggle('open');
   }
