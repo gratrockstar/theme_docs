@@ -33,6 +33,10 @@
 	.theme-docs-content {
 		width: 100%;
 		padding: 0 1em;
+		position: sticky;
+		top: 0;
+		align-self: flex-start;
+
 		:global(*:not(h1, h2, h3, h4, h5, h6)) {
 			font-size: 1rem;
 		}
