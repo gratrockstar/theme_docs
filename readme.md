@@ -17,6 +17,10 @@ EG:
 `/wp-content/themes/documentation/images/image/jpg`
 
 ## Filters
-`theme_docs_path_to_docs` URL path to documents folder.
+`theme_docs_path_to_docs` Path to documents folder.
 
 `theme_docs_uri_to_docs` URI path to documents folder.
+
+`theme_docs_path_to_glossary` Path to glossary folder.
+
+`theme_docs_uri_to_glossary` URI path to glossary folder.
