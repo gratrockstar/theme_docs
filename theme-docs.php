@@ -132,28 +132,45 @@ if ( ! class_exists( 'ThemeDocs' ) ) {
 		 */
 		public function admin_menu() {
 
+			$docs_directory_exists = file_exists( $this->path_to_docs );
+
 			$theme_docs_page = \add_menu_page(
 				__( 'Theme Docs', 'td' ),
 				__( 'Theme Docs', 'td' ),
 				'edit_posts',
 				'theme-documentation',
-				[ $this, 'theme_documentation_page' ],
+				'',
 				'dashicons-text-page',
 				61
 			);
 
-			$theme_glossary_page = \add_submenu_page(
+			if ( $docs_directory_exists ) {
+
+				$theme_docs_docs_page = \add_submenu_page(
+					'theme-documentation',
+					__( 'Documentation', 'td' ),
+					__( 'Documentation', 'td' ),
+					'edit_posts',
+					'theme-documentation',
+					[ $this, 'theme_documentation_page' ],
+				);
+
+				// Load the JS conditionally.
+				add_action( 'load-' . $theme_docs_docs_page, [ $this, 'load_admin_js' ] );
+
+			}
+
+			$theme_docs_glossary_page = \add_submenu_page(
 				'theme-documentation',
 				__( 'Glossary', 'td' ),
 				__( 'Glossary', 'td' ),
 				'edit_posts',
-				'theme-glossary',
+				$docs_directory_exists ? 'theme-glossary' : 'theme-documentation',
 				[ $this, 'theme_glossary_page' ],
 			);
 
 			// Load the JS conditionally.
-			add_action( 'load-' . $theme_docs_page, [ $this, 'load_admin_js' ] );
-			add_action( 'load-' . $theme_glossary_page, [ $this, 'load_admin_js' ] );
+			add_action( 'load-' . $theme_docs_glossary_page, [ $this, 'load_admin_js' ] );
 
 		}
 
@@ -260,10 +277,10 @@ td.files = <?php echo wp_kses_post( $this->get_documentation_files( $this->path_
 
 			// sort files.
 			// glossary needs this for case insensitive alpha sort.
-			if ( $type === 'glossary' ) {
-				$key_values = array_column($files, 'name'); 
-				array_multisort($key_values, SORT_ASC, SORT_NATURAL|SORT_FLAG_CASE,  $files);
-			}	else {
+			if ( 'glossary' === $type ) {
+				$key_values = array_column( $files, 'name' );
+				array_multisort( $key_values, SORT_ASC, SORT_NATURAL | SORT_FLAG_CASE, $files );
+			} else {
 				// docs is set up a bit different, to push folders to the bottom.
 				asort( $files );
 			}
