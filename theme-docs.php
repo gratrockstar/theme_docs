@@ -163,7 +163,7 @@ if ( ! class_exists( 'ThemeDocs' ) ) {
 
 			}
 
-			// Add the glossary submenu page, changing the slug 
+			// Add the glossary submenu page, changing the slug
 			// based on whether the docs folder exists.
 			$theme_docs_glossary_page = \add_submenu_page(
 				'theme-documentation',
