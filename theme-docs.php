@@ -132,8 +132,10 @@ if ( ! class_exists( 'ThemeDocs' ) ) {
 		 */
 		public function admin_menu() {
 
+			// Check if the path to the docs folder exists.
 			$docs_directory_exists = file_exists( $this->path_to_docs );
 
+			// Add our top level menu page.
 			$theme_docs_page = \add_menu_page(
 				__( 'Theme Docs', 'td' ),
 				__( 'Theme Docs', 'td' ),
@@ -144,6 +146,7 @@ if ( ! class_exists( 'ThemeDocs' ) ) {
 				61
 			);
 
+			// If the docs folder exists, add the submenu page.
 			if ( $docs_directory_exists ) {
 
 				$theme_docs_docs_page = \add_submenu_page(
@@ -160,6 +163,8 @@ if ( ! class_exists( 'ThemeDocs' ) ) {
 
 			}
 
+			// Add the glossary submenu page, changing the slug 
+			// based on whether the docs folder exists.
 			$theme_docs_glossary_page = \add_submenu_page(
 				'theme-documentation',
 				__( 'Glossary', 'td' ),
@@ -195,6 +200,7 @@ if ( ! class_exists( 'ThemeDocs' ) ) {
 		 */
 		public function theme_documentation_page() {
 
+			// check if docs folder exists, and output html.
 			$directory_exists = file_exists( $this->path_to_docs );
 			?>
 		<h1><?php esc_html_e( 'Theme Documentation', 'td' ); ?></h1>
@@ -221,6 +227,8 @@ td.files = <?php echo wp_kses_post( $this->get_documentation_files( $this->path_
 		 * @since  2023-09-29
 		 */
 		public function theme_glossary_page() {
+
+			// check if glossary folder exists, and output html.
 			$directory_exists = file_exists( $this->path_to_glossary );
 			?>
 		<h1><?php esc_html_e( 'Glossary', 'td' ); ?></h1>
@@ -250,6 +258,7 @@ td.files = <?php echo wp_kses_post( $this->get_documentation_files( $this->path_
 		 */
 		public function get_documentation_files( $dir, $type = 'docs' ) {
 
+			// set our path and uri keys.
 			$path = 'path_to_' . $type;
 			$uri  = 'uri_to_' . $type;
 
